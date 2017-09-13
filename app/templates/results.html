@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+  <head>
+    <title>IP Lookup</title>
+  </head>
+  <h1><b> {{ IP }} </b> was found in the following sites:</h1>
+  <body>
+  {% for site_number in range(number_of_sites) %}
+    <br>{{ Blacklist[site_number] }}</br>
+    {% endfor %}
+    <h1> Shodan Info:</h1>
+    <br> {{shodan_host}} </br>
+    <br> {{shodan_info}} </br>
+    <br> {{Shodan_Country}} </br>
+    Ports:
+    {% for ports in range(Shodan_Port_Count) %}
+    {{ Shodan_Port[ports] }}
+    {% endfor %}
+    <p></p>
+    <p></p>
+    <style>
+      .btnPad{margin-left:15px; margin-right:15px.}
+    </style>
+        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank">
+        <input type="submit" value="XForce">
+        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank">
+        <input type="submit" value="Abuse IP DB">
+        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank">
+        <input type="submit" value="Who is">
+        </form>
+        </form>
+        </form>
+        <form action="/index" method="get">
+        <input type="submit" value="Home">
+        </form>
+  </body>
+</html>
