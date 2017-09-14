@@ -1,18 +1,6 @@
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <head>
     <title>IP Lookup</title>
-      <script type="text/javascript">
-function open_win() {
-window.open("http://www.java2s.com/")
-window.open("http://www.facebook.com/")
-window.open("http://www.google.com/")
-window.open("http://www.yourcorset.com/")
-window.open("http://www.mythongoftheday.com/")
-window.open("http://www.boo.by/")
-window.open("http://www.searchandsocialmediamarketing.co.uk/")
-window.open("http://www.posterous.com/")
-}
-    </script>
   </head>
   <h1><b> {{ IP }} </b> was found in the following sites:</h1>
   <body>
@@ -20,7 +8,7 @@ window.open("http://www.posterous.com/")
     <br>{{ Blacklist[site_number] }}</br>
     {% endfor %}
     <h1> Shodan Info:</h1>
-    <br> {{shodan_host}} </br>
+    <p> {{shodan_host}} </p>
     <br> {{shodan_info}} </br>
     <br> {{Shodan_Country}} </br>
     Ports:
