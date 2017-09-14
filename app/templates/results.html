@@ -5,12 +5,14 @@
   <h1><b> {{ IP }} </b> was found in the following sites:</h1>
   <body>
   {% for site_number in range(number_of_sites) %}
-    <br>{{ Blacklist[site_number] }}</br>
-    {% endfor %}
+        {% if Blacklist[site_number] != "" %}
+     {{ Blacklist[site_number] }}<br>
+        {% endif %}
+  {% endfor %}
     <h1> Shodan Info:</h1>
-    <p> {{shodan_host}} </p>
-    <br> {{shodan_info}} </br>
-    <br> {{Shodan_Country}} </br>
+    Shodan hostname: {{shodan_host}} <br>
+    Shodan info: {{shodan_info}} <br>
+    Country: {{Shodan_Country}} <br>
     Ports:
     {% for ports in range(Shodan_Port_Count) %}
     {{ Shodan_Port[ports] }}
@@ -20,17 +22,9 @@
     <style>
       .btnPad{margin-left:15px; margin-right:15px.}
     </style>
-        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank">
-            <input type="submit" value="XForce">
-        </form>
-        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank">
-            <input type="submit" value="Abuse IP DB">
-        </form>
-        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank">
-            <input type="submit" value="Who is">
-        </form>
-        <form action="/index" method="get">
-            <input type="submit" value="Home">
-        </form>
-  </body>
+        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce"></form>
+        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB"></form>
+        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"></form><input type="submit" value="Who is">
+        <form action="/index" method="get"><input type="submit" value="Home"></form>
+        </body>
 </html>

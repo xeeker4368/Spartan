@@ -46,9 +46,9 @@ def Actions_to_IP():
     Shodan_Port_Count = (Shodan_Port_Count), Shodan_Country=(Shodan_Country))
 
 def pull_blacklist():
-    global site_number
-    global blacklist_site_name
-    blacklist_site_name = []
+    global site_number,blacklist_site_name, site_count
+    blacklist_site_name = {}
+    site_count = 0
     website_list = open('/home/localadmin/Documents/IP_List.txt')
     Blacklisted_pull_sites = website_list.readlines()
     file_length = len(Blacklisted_pull_sites)
@@ -65,8 +65,10 @@ def pull_blacklist():
             IP_Match = re.match(IP_Regex, lines)
             if IP_Match:
                 if  Searchable_IP == lines:
-                    blacklist_site_name.append([(Blacklisted_pull_sites[site_number])])
-                continue
+                    blacklist_site_name[site_count] = str(Blacklisted_pull_sites[site_number])
+                    site_count = site_count + 1
+
+                    continue
             else:
                 continue
 
@@ -78,8 +80,8 @@ def pull_Shodan():
     Requested_IP = str(Requested_IP).replace('u',"")
     Shodan_api = shodan.Shodan("U2II0MBVysVVrziUhEi7LnFxQvNcbCVV")
     Shodan_Host_Info = Shodan_api.host(Requested_IP)
-    Shodan_host = Shodan_Host_Info['hostnames']
-    Shodan_Country = Shodan_Host_Info['country_name']
+    Shodan_host = str(Shodan_Host_Info['hostnames'])
+    Shodan_Country = str(Shodan_Host_Info['country_name'])
     Shodan_host = str(Shodan_host).replace('u',"")
     Shodan_Info = Shodan_Host_Info.get('org', 'n/a')
     for Shodan_Port in Shodan_Host_Info['data']:
