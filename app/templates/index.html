@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="/results" method="post">
+    IP to search for:<input type="text" name="Searchable_IP">
+    <p></p>
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+    </form>
+{% endblock %}
