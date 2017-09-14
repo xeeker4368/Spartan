@@ -1,6 +1,18 @@
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <head>
     <title>IP Lookup</title>
+      <script type="text/javascript">
+function open_win() {
+window.open("http://www.java2s.com/")
+window.open("http://www.facebook.com/")
+window.open("http://www.google.com/")
+window.open("http://www.yourcorset.com/")
+window.open("http://www.mythongoftheday.com/")
+window.open("http://www.boo.by/")
+window.open("http://www.searchandsocialmediamarketing.co.uk/")
+window.open("http://www.posterous.com/")
+}
+    </script>
   </head>
   <h1><b> {{ IP }} </b> was found in the following sites:</h1>
   <body>
@@ -21,16 +33,16 @@
       .btnPad{margin-left:15px; margin-right:15px.}
     </style>
         <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank">
-        <input type="submit" value="XForce">
+            <input type="submit" value="XForce">
+        </form>
         <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank">
-        <input type="submit" value="Abuse IP DB">
+            <input type="submit" value="Abuse IP DB">
+        </form>
         <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank">
-        <input type="submit" value="Who is">
-        </form>
-        </form>
+            <input type="submit" value="Who is">
         </form>
         <form action="/index" method="get">
-        <input type="submit" value="Home">
+            <input type="submit" value="Home">
         </form>
   </body>
 </html>
