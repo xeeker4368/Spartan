@@ -36,13 +36,16 @@ def root():
 
 @app.route('/results', methods=['POST', 'GET'])
 def Actions_to_IP():
+    Shodan_host = ""
+    Shodan_Info = ""
+    Shodan_Ports_Open = ""
+    Shodan_Port_Count = 0
+    Shodan_Country = ""
     pull_blacklist()
     pull_alexa()
     pull_OTX()
-    if pull_Shodan() == "{NameError}name 'Shodan_api' is not defined:":
-        return
-    else:
-        site_count = len(blacklist_site_name)
+    pull_Shodan()
+    site_count = len(blacklist_site_name)
     return render_template('results.html', IP=request.form['Searchable_IP'],
     Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
     shodan_host = (Shodan_host),Shodan_info = (Shodan_Info), Shodan_Port = (Shodan_Ports_Open), \
@@ -77,23 +80,30 @@ def pull_blacklist():
                 continue
 
 def pull_Shodan():
-    global Shodan_Port_Count, Shodan_host, Shodan_Info, Shodan_Ports_Open, Shodan_Country, Shodan_Host_Info
-    Shodan_Ports_Open = []
-    Shodan_Port_Count = 0
-    Shodan_Host_Info = ""
-    Requested_IP = request.form['Searchable_IP']
-    Requested_IP = str(Requested_IP).replace('u',"")
-    Shodan_api = shodan.Shodan("U2II0MBVysVVrziUhEi7LnFxQvNcbCVV")
-    print Shodan_api
-    Shodan_Host_Info = Shodan_api.host(Requested_IP)
-    Shodan_host = str(Shodan_Host_Info['hostnames'])
-    Shodan_Country = str(Shodan_Host_Info['country_name'])
-    Shodan_host = str(Shodan_host).replace('u',"")
-    Shodan_Info = Shodan_Host_Info.get('org', 'n/a')
-    for Shodan_Port in Shodan_Host_Info['data']:
-        Shodan_Ports_Open.append(Shodan_Port['port'])
-        Shodan_Port_Count = len(Shodan_Ports_Open)
-
+    global Shodan_Port_Count, Shodan_host, Shodan_Info, Shodan_Ports_Open, Shodan_Country, \
+    Shodan_Host_Info, Shodan_Host_Info, shodan_host, Shodan_info, Shodan_Port, Shodan_Port_Count
+    try:
+        Shodan_Ports_Open = []
+        Shodan_Port_Count = 0
+        Shodan_Host_Info = ""
+        shodan_host = ""
+        Shodan_info = ""
+        Shodan_Port = ""
+        Shodan_Country = ""
+        Requested_IP = request.form['Searchable_IP']
+        Requested_IP = str(Requested_IP).replace('u',"")
+        Shodan_api = shodan.Shodan("U2II0MBVysVVrziUhEi7LnFxQvNcbCVV")
+        print Shodan_api
+        Shodan_Host_Info = Shodan_api.host(Requested_IP)
+        Shodan_host = str(Shodan_Host_Info['hostnames'])
+        Shodan_Country = str(Shodan_Host_Info['country_name'])
+        Shodan_host = str(Shodan_host).replace('u',"")
+        Shodan_Info = Shodan_Host_Info.get('org', 'n/a')
+        for Shodan_Port in Shodan_Host_Info['data']:
+            Shodan_Ports_Open.append(Shodan_Port['port'])
+            Shodan_Port_Count = len(Shodan_Ports_Open)
+    except Exception as e:
+        return 'Error occurred : ' + str(e)
 
 def pull_OTX():
     global OTX_Match_Found

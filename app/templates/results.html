@@ -22,6 +22,7 @@
     No matches found
     {% endif %}
 
+    {% if shodan_host != "" and shodan_info != "" and Shodan_Country != "" %}
     <h1> Shodan Info:</h1>
     Shodan hostname: {{shodan_host}} <br>
     Shodan info: {{shodan_info}} <br>
@@ -30,6 +31,7 @@
     {% for ports in range(Shodan_Port_Count) %}
     {{ Shodan_Port[ports] }}
     {% endfor %}
+    {% endif %}
 
 
 
