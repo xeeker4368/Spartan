@@ -4,11 +4,24 @@
   </head>
   <h1><b> {{ IP }} </b> was found in the following sites:</h1>
   <body>
-  {% for site_number in range(number_of_sites) %}
+    {% for site_number in range(number_of_sites) %}
         {% if Blacklist[site_number] != "" %}
-     {{ Blacklist[site_number] }}<br>
+    {{ Blacklist[site_number] }}<br>
         {% endif %}
-  {% endfor %}
+    {% endfor %}
+
+    {% if OTX != "" %}
+        {{ OTX }}<br>
+    {% endif %}
+
+    {% if Alexa != "" %}
+        {{ Alexa }}<br>
+    {% endif %}
+
+    {% if Blacklist[site_number] == "" and OTX == "" and Alexa == "" %}
+    No matches found
+    {% endif %}
+
     <h1> Shodan Info:</h1>
     Shodan hostname: {{shodan_host}} <br>
     Shodan info: {{shodan_info}} <br>
@@ -17,6 +30,10 @@
     {% for ports in range(Shodan_Port_Count) %}
     {{ Shodan_Port[ports] }}
     {% endfor %}
+
+
+
+
     <p></p>
     <p></p>
     <style>
