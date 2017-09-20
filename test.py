@@ -1,14 +1,13 @@
 #!flask/bin/python
-from flask import request, redirect, Flask, render_template
-from app import app
-import urllib2
-import time
 import re
-import shodan
-import webbrowser
-from zipfile import ZipFile
+import time
+import urllib2
 from StringIO import StringIO
-
+from zipfile import ZipFile
+from flask_bootstrap import Bootstrap
+import shodan
+from flask import request, Flask, render_template
+from app import app
 IP_Loc_File_Name = ""
 IP_Loc_Domain = ""
 
@@ -34,6 +33,11 @@ IP_Regex = r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
 def root():
     return render_template('index.html')
 
+def Render_Sidebase():
+    print request.form['Searchable_IP']
+    return render_template('base.html', IP=request.form['Searchable_IP'])
+
+
 @app.route('/results', methods=['POST', 'GET'])
 def Actions_to_IP():
     Shodan_host = ""
@@ -45,6 +49,7 @@ def Actions_to_IP():
     pull_alexa()
     pull_OTX()
     pull_Shodan()
+    Render_Sidebase()
     site_count = len(blacklist_site_name)
     return render_template('results.html', IP=request.form['Searchable_IP'],
     Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
@@ -135,5 +140,4 @@ def pull_alexa():
                 continue
             else:
                 continue
-
 app.run(debug = True)

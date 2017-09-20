@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action="/results" method="post">
-        IP to search for:<p>
-        <input type="text" name="Searchable_IP"><p>
-        <input type="submit" value="Submit">    <input type="reset" value="Reset">
-    </form>
+    <body>
+            <form action="/results" method="post">
+    IP to search for:<p>
+            <input type="text" name="Searchable_IP"><p>
+            <input type="submit" value="Submit" button type="button" class="btn btn-primary">    <input type="reset" value="Reset" button type="button" class="btn btn-danger">
+            </form>
+    </body>
 {% endblock %}
