@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>
+    <body>
+    Site Added!:<p>
+    <h2>Your site file now contains the following sites:</h2><br>
+        {% for sites in Site_file %}
+    {{ sites }}<br>
+    {% endfor %}
+    <input type="text" name="/add_site"></form>
+    <form action="/" method="get">  <input type="submit" value="Add Site" button type="button" class="btn btn-primary">    <input type="reset" value="Reset" button type="button" class="btn btn-danger">     <form action="/" method="get"><input type="submit" value="Home" button type="button" class="btn btn-primary"></form>
+    </form>
+    </body>
+{% endblock %}

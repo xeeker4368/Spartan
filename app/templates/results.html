@@ -1,9 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+.bs-example  div[class^="col"] {
+	border: 1px solid white;
+	background: #f5f5f5;
+	text-align: center;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	}
+</style>
 <body>
 <p></p>
-  <b> {{ IP }} </b> was found in the following sites:<p>
+<div class="container-fluid">
+	<!-- Bootstrap Grid -->
+	<div class="row">
+	  <div class="col-md-4">
+          <h5><b> {{ IP }}</b> was found in the following sites:</h5>
               {% for site_number in range(number_of_sites) %}
                 {% if Blacklist[site_number] != "" %}
             {{ Blacklist[site_number] }}<br>
@@ -18,24 +31,16 @@
             {% if Blacklist[site_number] == "" and OTX == "" and Alexa == "" %}
     No matches found
             {% endif %}
-    {% if shodan_host != "" and shodan_info != "" and Shodan_Country != "" %}
-    <h1> Shodan Info:</h1>
-        Shodan hostname: {{shodan_host}} <br>
-        Shodan info: {{shodan_info}} <br>
-        Country: {{Shodan_Country}} <br>
-        Ports:
-        {% for ports in range(Shodan_Port_Count) %}
-        {{ Shodan_Port[ports] }}
-        {% endfor %}
-        {% endif %}
-  </div>
+      </div>
+    <div class="col-md-4">
+    Geo Info:
+    Country: {{ Geo_Country }} <p>
+    City / State: {{ Geo_Subvisions }} <p>
+    Timezeone: {{ Geo_Timezeone }}
+    </div>
+    </div>
 </div>
-    <p></p>
-    <p></p>
-        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" class="btn btn-primary"></form></div>
-        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="btn btn-primary"></form></div>
-        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"></form>
-        <input type="submit" value="Who is"button type="button" class="btn btn-primary">
-        <form action="/index" method="get"><input type="submit" value="Home"></form>
+
+
 </body>
 {% endblock %}

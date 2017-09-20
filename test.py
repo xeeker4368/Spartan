@@ -4,16 +4,67 @@ import time
 import urllib2
 from StringIO import StringIO
 from zipfile import ZipFile
-from flask_bootstrap import Bootstrap
 import shodan
-from flask import request, Flask, render_template
+from flask import request, render_template
 from app import app
+from geoip import geolite2
+import json
+
+
+
 IP_Loc_File_Name = ""
 IP_Loc_Domain = ""
 
 Import_Date = time.strftime("%I:%M:%S")
 
-# unzip something
+IP_Regex = r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+
+@app.route('/')
+def root():
+    return render_template('index.html')
+
+@app.route('/add_site', methods=['POST', 'GET'])
+def Add_Site():
+    global Site_file
+    return render_template('add_site.html')
+
+@app.route('/add_site_results', methods=['POST'])
+def Add_Site_Results():
+    global URL_List
+    URL_List = "/home/localadmin/Documents/IP_List.txt"
+    with open(URL_List, "a") as Site_file:
+        Site_file.write(request.form['Additional_Site'])
+        Site_file.write("\n")
+    with open(URL_List) as URLS:
+        content = URLS.readlines()
+    Site_file.close()
+    URLS.close()
+    return render_template('add_site_results.html', Site_file=content)
+
+@app.route('/results', methods=['POST', 'GET'])
+def Actions_to_IP():
+#    Shodan_host = ""
+#    Shodan_Info = ""
+#    Shodan_Ports_Open = ""
+#    Shodan_Port_Count = 0
+#    Shodan_Country = ""
+    pull_blacklist()
+    pull_alexa()
+    pull_OTX()
+    pull_GeoIP()
+    site_count = len(blacklist_site_name)
+    return render_template('results.html', IP=request.form['Searchable_IP'],
+    Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
+    OTX = (OTX_Match_Found), \
+    Alexa = (Alexa_Match_Found), Geo_Country=(Geo_Country), Geo_Subvisions=(Geo_Subvisions), \
+    Geo_Timezeone=(Geo_Timezeone))
+
+#    return render_template('results.html', IP=request.form['Searchable_IP'],
+#    Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
+#    shodan_host = (Shodan_host),Shodan_info = (Shodan_Info), Shodan_Port = (Shodan_Ports_Open), \
+#    Shodan_Port_Count = (Shodan_Port_Count), Shodan_Country=(Shodan_Country), OTX = (OTX_Match_Found), \
+#    Alexa = (Alexa_Match_Found))
+
 def download_unzip(input_zip):
     url = urllib2.urlopen(input_zip)
     unzipped_string = ''
@@ -27,88 +78,42 @@ def download_list(url):
     response = urllib2.urlopen(url)
     return response.read()
 
-IP_Regex = r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
-
-@app.route('/')
-def root():
-    return render_template('index.html')
-
-def Render_Sidebase():
-    print request.form['Searchable_IP']
-    return render_template('base.html', IP=request.form['Searchable_IP'])
-
-
-@app.route('/results', methods=['POST', 'GET'])
-def Actions_to_IP():
-    Shodan_host = ""
-    Shodan_Info = ""
-    Shodan_Ports_Open = ""
-    Shodan_Port_Count = 0
-    Shodan_Country = ""
-    pull_blacklist()
-    pull_alexa()
-    pull_OTX()
-    pull_Shodan()
-    Render_Sidebase()
-    site_count = len(blacklist_site_name)
-    return render_template('results.html', IP=request.form['Searchable_IP'],
-    Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
-    shodan_host = (Shodan_host),Shodan_info = (Shodan_Info), Shodan_Port = (Shodan_Ports_Open), \
-    Shodan_Port_Count = (Shodan_Port_Count), Shodan_Country=(Shodan_Country), OTX = (OTX_Match_Found), \
-    Alexa = (Alexa_Match_Found))
-
 def pull_blacklist():
     global site_number,blacklist_site_name, site_count
-    blacklist_site_name = {}
-    site_count = 0
-    website_list = open('/home/localadmin/Documents/IP_List.txt')
-    Blacklisted_pull_sites = website_list.readlines()
-    file_length = len(Blacklisted_pull_sites)
-    site_number = 0
-    file_length = file_length - 1
-    IP_Regex = r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
-    for site_number in range(0, file_length):
-        for lines in urllib2.urlopen(Blacklisted_pull_sites[site_number]):
-            (Blacklisted_pull_sites[site_number]) = (Blacklisted_pull_sites[site_number]).replace("\n", "")
-            Searchable_IP = request.form['Searchable_IP']
-            Searchable_IP = str(Searchable_IP).replace('u',"")
-            lines = lines.replace("\n", "")
-            lines = lines.replace("\r", "")
-            IP_Match = re.match(IP_Regex, lines)
-            if IP_Match:
-                if  Searchable_IP == lines:
-                    blacklist_site_name[site_count] = str(Blacklisted_pull_sites[site_number])
-                    site_count = site_count + 1
-
-                    continue
-            else:
-                continue
-
-def pull_Shodan():
-    global Shodan_Port_Count, Shodan_host, Shodan_Info, Shodan_Ports_Open, Shodan_Country, \
-    Shodan_Host_Info, Shodan_Host_Info, shodan_host, Shodan_info, Shodan_Port, Shodan_Port_Count
     try:
-        Shodan_Ports_Open = []
-        Shodan_Port_Count = 0
-        Shodan_Host_Info = ""
-        shodan_host = ""
-        Shodan_info = ""
-        Shodan_Port = ""
-        Shodan_Country = ""
-        Requested_IP = request.form['Searchable_IP']
-        Requested_IP = str(Requested_IP).replace('u',"")
-        Shodan_api = shodan.Shodan("U2II0MBVysVVrziUhEi7LnFxQvNcbCVV")
-        print Shodan_api
-        Shodan_Host_Info = Shodan_api.host(Requested_IP)
-        Shodan_host = str(Shodan_Host_Info['hostnames'])
-        Shodan_Country = str(Shodan_Host_Info['country_name'])
-        Shodan_host = str(Shodan_host).replace('u',"")
-        Shodan_Info = Shodan_Host_Info.get('org', 'n/a')
-        for Shodan_Port in Shodan_Host_Info['data']:
-            Shodan_Ports_Open.append(Shodan_Port['port'])
-            Shodan_Port_Count = len(Shodan_Ports_Open)
-    except Exception as e:
-        return 'Error occurred : ' + str(e)
+        blacklist_site_name = {}
+        site_count = 0
+        website_list = open('/home/localadmin/Documents/IP_List.txt')
+        Blacklisted_pull_sites = website_list.readlines()
+        file_length = len(Blacklisted_pull_sites)
+        site_number = 0
+        file_length = file_length - 1
+        IP_Regex = r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+        for site_number in range(0, file_length):
+            for lines in urllib2.urlopen(Blacklisted_pull_sites[site_number]):
+                (Blacklisted_pull_sites[site_number]) = (Blacklisted_pull_sites[site_number]).replace("\n", "")
+                Searchable_IP = request.form['Searchable_IP']
+                Searchable_IP = str(Searchable_IP).replace('u',"")
+                lines = lines.replace("\n", "")
+                lines = lines.replace("\r", "")
+                IP_Match = re.findall(IP_Regex, lines)
+                if IP_Match:
+                    if  Searchable_IP == IP_Match[0]:
+                        blacklist_site_name[site_count] = str(Blacklisted_pull_sites[site_number])
+                        site_count = site_count + 1
+                        continue
+                else:
+                        continue
+    except:
+        return
+
+def pull_GeoIP():
+    global Geo_Country, Geo_Subvisions, Geo_Timezeone
+    Geo_IP_Info = geolite2.lookup(request.form['Searchable_IP'])
+    Geo_Country = Geo_IP_Info.country
+    Geo_Subvisions = Geo_IP_Info.subdivisions
+    Geo_Timezeone = Geo_IP_Info.timezone
+
 
 def pull_OTX():
     global OTX_Match_Found

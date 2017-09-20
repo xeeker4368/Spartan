@@ -39,26 +39,17 @@ li a:hover:not(.active) {
 </style>
 </head>
 <body>
-  {% if IP != "" %}
-  <ul>
+ <ul>
     <p>
-      <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" disabled class="btn btn-primary"></form>
-      <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" disabled class="btn btn-primary"></form>
-      <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"></form>
-      <input type="submit" value="Who is"button type="button" class="btn btn-primary">
+        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" class="btn btn-primary"></form><p>
+        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="btn btn-primary"></form><p>
+        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"><input type="submit" value="Who is"button type="button" class="btn btn-primary"></form>
     <p>
     <p>
-      <form action="/" method="get"><input type="submit" value="Home"></form>
+        <form action="/add_site" method="get"><input type="submit" value="Add Site"button type="button" class="btn btn-primary"></form><p>
+        <form action="/" method="get"><input type="submit" value="Home" button type="button" class="btn btn-primary"></form><p>
   </ul>
-  {% else %}
-  <ul>
-      <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" class="btn btn-primary"></form>
-      <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="btn btn-primary"></form>
-      <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"></form>
-      <input type="submit" value="Who is"button type="button" class="btn btn-primary">
-  </ul>
-  {% endif %}
-<div style="margin-left:10%;padding:1px 16px;height:1000px;">
+  <div style="margin-left:10%;padding:1px 16px;height:1000px;">
   <h1>Welcome to GoatRider</h1>
   <img src="{{ url_for('static', filename = 'img/GoatRider.png') }}">
   <script src="http://code.jquery.com/jquery-latest.js"></script>
