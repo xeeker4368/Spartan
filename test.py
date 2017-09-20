@@ -145,4 +145,4 @@ def pull_alexa():
                 continue
             else:
                 continue
-app.run(debug = True)
+app.run(host='0.0.0.0', port=80)
