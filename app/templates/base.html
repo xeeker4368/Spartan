@@ -3,7 +3,6 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
 <style>
 body {
     margin: 0;
@@ -12,7 +11,7 @@ body {
 ul {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 5px;
     width: 10%;
     background-color: #f1f1f1;
     position: fixed;
@@ -41,14 +40,15 @@ li a:hover:not(.active) {
 <body>
  <ul>
     <p>
-        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" class="btn btn-primary"></form><p>
-        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="btn btn-primary"></form><p>
-        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"><input type="submit" value="Who is"button type="button" class="btn btn-primary"></form>
-    <p>
-    <p>
-        <form action="/add_site" method="get"><input type="submit" value="Add Site"button type="button" class="btn btn-primary"></form><p>
-        <form action="/" method="get"><input type="submit" value="Home" button type="button" class="btn btn-primary"></form><p>
-  </ul>
+    <div class="span2">
+        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" class="btn btn-primary btn-block"></form><p>
+        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="btn btn-primary btn-block"></form><p>
+        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"><input type="submit" value="Whois"button type="button" class="btn btn-primary btn-block"></form><p>
+        <form action="/add_site" method="get"><input type="submit" value="Add Site"button type="button" class="btn btn-primary btn-block"></form><p>
+        <form action="/" method="get"><input type="submit" value="Home" button type="button" class="btn btn-primary btn-block"></form>
+    </div>
+ </ul>
+
   <div style="margin-left:10%;padding:1px 16px;height:1000px;">
   <h1>Welcome to GoatRider</h1>
   <img src="{{ url_for('static', filename = 'img/GoatRider.png') }}">

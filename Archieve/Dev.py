@@ -43,7 +43,12 @@ def Add_Site_Results():
 
 #compiles and pulls all of the results from the various searches and publishes them to the results site.
 @app.route('/results', methods=['POST', 'GET'])
-def Actions_to_IP():
+def User_Input():
+    Input = IP_Regex = r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+    IP_Match = re.findall(IP_Regex, Input)
+    if not IP_Match:
+        pass
+    else:
         pull_blacklist()
         pull_alexa()
         pull_OTX()

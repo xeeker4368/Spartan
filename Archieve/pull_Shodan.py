@@ -24,3 +24,18 @@ def pull_Shodan():
     except Exception as e:
         return 'Error occurred : ' + str(e)
 """
+
+
+
+
+#    return render_template('results.html', IP=request.form['Searchable_IP'],
+#    Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
+#    shodan_host = (Shodan_host),Shodan_info = (Shodan_Info), Shodan_Port = (Shodan_Ports_Open), \
+#    Shodan_Port_Count = (Shodan_Port_Count), Shodan_Country=(Shodan_Country), OTX = (OTX_Match_Found), \
+#    Alexa = (Alexa_Match_Found))
+
+#    Shodan_host = ""
+#    Shodan_Info = ""
+#    Shodan_Ports_Open = ""
+#    Shodan_Port_Count = 0
+#    Shodan_Country = ""
