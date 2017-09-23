@@ -10,6 +10,19 @@ p{
     background: #00ff00;
 }
 
+p.wrap {
+    width: 25em;
+    border: 1px solid #000000;
+    word-wrap: break-word;
+}
+
+div.scroll {
+    width: 30%;
+    height: 30%;
+    overflow: scroll;
+}
+
+
 </style>
 <body>
 <!-- Bootstrap Grid -->
@@ -34,15 +47,15 @@ p{
     <b>Geo Info:</b>
     <b>Country: </b>{{ Geo_Country }} <br>
     <b>City / State: </b>{{ Geo_Subvisions }} <br>
-    <b>Timezeone: </b>{{ Geo_Timezeone }}<br>
+    <b>Timezone: </b>{{ Geo_Timezeone }}<br>
 </div>
 
 
-
+<div class="row">
     {% for legth in range(cymon_legth) %}<br>
 
 <div class="col-md-5";><p>
-    <b>Cymon info:</b>
+    <b>Cymon info:</b><br>
     <b>Title:</b> {{ cymon_title[legth] }} <br>
     <b>Feed: </b> {{ cymon_feed[legth] }} <br>
     <b>Last seen Time:</b> {{ cymon_time[legth] }} <br>
@@ -50,9 +63,24 @@ p{
     <b>IP:</b> {{ cymon_ioc_ip[legth] }}<br>
 </div>
     {% endfor %}
-
 </div>
-
+    <div class="row">
+        <div class="col-5";><p>
+            <p class="wrap">
+                <div class="scroll">
+    <b>Virus Total Results:</b><br>
+    <b>Total number of results: {{ VT_number_of_responses }}</b><br>
+    {% for VT_responses in range(VT_number_of_responses) %}
+    <br>
+    <b>Scan date:</b> {{ VT_Response_Scan_Date[VT_responses] }}<br>
+    <b>URL resolution:</b> {{ VT_Response_URL[VT_responses] }}<br>
+    {% endfor %}
+                </div>
+            </p>
+        </div>
+    </div>
+</div>
+</div>
 <form action="/" method="get"><input type="submit" value="Search again" button type="button" class="btn btn-primary"></form>
 
 </body>

@@ -9,6 +9,7 @@ from geoip import geolite2
 import json
 from app import app
 from urllib2 import urlopen
+import urllib
 
 IP_Loc_File_Name = ""
 IP_Loc_Domain = ""
@@ -51,6 +52,7 @@ def User_Input():
         pull_OTX()
         pull_GeoIP()
         pull_cymon()
+        pull_virustotal()
         site_count = len(blacklist_site_name)
         return render_template('results.html', IP=request.form['Searchable_IP'],
         Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
@@ -58,7 +60,9 @@ def User_Input():
         Alexa = (Alexa_Match_Found), Geo_Country=(Geo_Country), Geo_Subvisions=(Geo_Subvisions), \
         Geo_Timezeone=(Geo_Timezeone), cymon_title=(cymon_response_title), cymon_feed=(cymon_response_feed), \
         cymon_time = (cymon_response_time), cymon_ioc_url=(cymon_response_ioc_url), \
-        cymon_ioc_ip =(cymon_response_ioc_ip), cymon_legth=(cymon_response_leght))
+        cymon_ioc_ip =(cymon_response_ioc_ip), cymon_legth=(cymon_response_leght), VT_number_of_responses=(VT_number_of_responses), \
+        VT_Response_Scan_Date=(VT_Response_Scan_Date), VT_Response_URL=(VT_Response_URL)) #VT_number_of_resolution=(VT_number_of_resolution), \
+        #VT_Resolutions_Hostnames=(VT_Resolutions_Hostnames),  VT_Resolutions_Last_Resolution=(VT_Resolutions_Last_Resolution))
 
 
 @app.route('/URL_results', methods=['POST', 'GET'])
@@ -153,13 +157,11 @@ def pull_alexa():
 def pull_cymon():
     global cymon_response_title, cymon_response_feed, \
     cymon_response_time, cymon_response_ioc, cymon_response_ioc_ip, cymon_response_ioc_url, cymon_response_leght
+    # Declaring Variables
+    cymon_response_title, cymon_response_feed, \
+    cymon_response_time, cymon_response_ioc, cymon_response_ioc_ip, cymon_response_ioc_url, cymon_response_leght = \
+    {}, {}, {}, {}, {}, {}, {}
     cymon_request = 'https://api.cymon.io/v2/ioc/search/ip/' + request.form['Searchable_IP']
-    cymon_response_title = {}
-    cymon_response_feed = {}
-    cymon_response_time = {}
-    cymon_response_ioc = {}
-    cymon_response_ioc_ip = {}
-    cymon_response_ioc_url = {}
     cymon_response_body = json.load(urlopen(cymon_request))
     cymon_response_leght = cymon_response_body[u'total']
     for cymon_legth in range(cymon_response_leght):
@@ -170,6 +172,27 @@ def pull_cymon():
         cymon_response_ioc_ip[cymon_legth] = cymon_response_ioc[cymon_legth].get(u'ip')
         cymon_response_ioc_url[cymon_legth] = cymon_response_ioc[cymon_legth].get(u'url')
         cymon_legth = cymon_legth + 1
+
+def pull_virustotal():
+    global VT_number_of_responses, VT_Response_Scan_Date, VT_Response_URL ,VT_number_of_resolution, \
+    VT_Resolutions_Hostnames, VT_Resolutions_Last_Resolution
+    # Declaring Variables
+    VT_number_of_responses, VT_Response_Scan_Date, VT_Response_URL, VT_number_of_resolution, \
+    VT_Resolutions_Hostnames, VT_Resolutions_Last_Resolution = {}, {}, {}, {}, {}, {}
+
+    VT_url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
+    VT_parameters = {'ip': request.form['Searchable_IP'], 'apikey': '40dc8379e9077009a2315e0a883b65d01c8e1e66002b55f732540845c83570ae'}
+    VT_response = urllib.urlopen('%s?%s' % (VT_url, urllib.urlencode(VT_parameters))).read()
+    VT_response_dict = json.loads(VT_response)
+    VT_number_of_responses = VT_response_dict[u'detected_urls'].__len__()
+    for VT_responses in range(VT_number_of_responses):
+        VT_Response_Scan_Date[VT_responses] = VT_response_dict[u'detected_urls'][VT_responses][u'scan_date']
+        VT_Response_URL[VT_responses] = VT_response_dict[u'detected_urls'][VT_responses][u'url']
+    VT_number_of_resolution = VT_response_dict[u'resolutions'].__len__()
+    TV_total_Domain_resolution = VT_response_dict[u'resolutions']
+    for VT_Resolutions in range(VT_number_of_resolution):
+        VT_Resolutions_Hostnames[VT_Resolutions] = TV_total_Domain_resolution[VT_Resolutions][u'hostname']
+        VT_Resolutions_Last_Resolution[VT_Resolutions] = TV_total_Domain_resolution[VT_Resolutions][u'last_resolved']
 
 
 app.run(debug='true')

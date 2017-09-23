@@ -1,47 +1,28 @@
+import urllib
 import json
-from urllib2 import urlopen
-
-Searchable_IP = "63.247.140.224"
 
 
-cymon_request = 'https://api.cymon.io/v2/ioc/search/ip/' + Searchable_IP
-cymon_response_title = {}
-cymon_response_feed = {}
-cymon_response_time = {}
-cymon_response_ioc = {}
-cymon_response_ioc_ip = {}
-cymon_response_ioc_url = {}
-cymon_response_body = json.load(urlopen(cymon_request))
-cymon_response_leght = cymon_response_body[u'total']
-for cymon_legth in range(cymon_response_leght):
-    cymon_response_title[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'title')
-    cymon_response_feed[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'feed')
-    cymon_response_time[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'timestamp')
-    cymon_response_ioc[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'ioc')
-    cymon_response_ioc_ip[cymon_legth] = cymon_response_ioc[cymon_legth].get(u'ip')
-    cymon_response_ioc_url[cymon_legth] = cymon_response_ioc[cymon_legth].get(u'url')
+Searchable_IP = '90.156.201.27'
 
+VT_url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
+VT_parameters = {'ip': Searchable_IP, 'apikey': '40dc8379e9077009a2315e0a883b65d01c8e1e66002b55f732540845c83570ae'}
+VT_response = urllib.urlopen('%s?%s' % (VT_url, urllib.urlencode(VT_parameters))).read()
+VT_response_dict = json.loads(VT_response)
+VT_number_of_responses = VT_response_dict[u'detected_urls'].__len__()
+print VT_response_dict[u'as_owner']
+print VT_response_dict[u'country']
+for VT_responses in range(VT_number_of_responses):
+    VT_Response_Scan_Date = VT_response_dict[u'detected_urls'][VT_responses][u'scan_date']
+    VT_Response_URL = VT_response_dict[u'detected_urls'][VT_responses][u'url']
 
+    print "Scan Date: " + VT_Response_Scan_Date
+    print "Scanned URL Resolution: " + VT_Response_URL
 
-for legth in range(cymon_response_leght):
-    print cymon_response_title[legth]
-    print cymon_response_feed[legth]
-    print cymon_response_time[legth]
-    print cymon_response_ioc_ip[legth]
-    print cymon_response_ioc_url[legth]
-    print legth
-    print
+VT_number_of_resolution = VT_response_dict[u'resolutions'].__len__()
+TV_total_Domain_resolution = VT_response_dict[u'resolutions']
+print "Number of resolutions: %s" % (VT_number_of_resolution)
 
-
-
-{% extends "base.html" %}
-
-{% block content %}
-<style>
-.bs-example  div[class^="col"] {
-	border: 1px solid white;
-	background: #f5f5f5;
-	text-align: center;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	}
+for VT_Resolutions in range(VT_number_of_resolution):
+    VT_Resolutions_Hostnames = TV_total_Domain_resolution[VT_Resolutions][u'hostname']
+    VT_Resolutions_Last_Resolution = TV_total_Domain_resolution[VT_Resolutions][u'last_resolved']
+    print "Last resolved: %s %s " % (VT_Resolutions_Hostnames, VT_Resolutions_Last_Resolution)
