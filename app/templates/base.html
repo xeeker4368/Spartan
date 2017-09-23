@@ -11,9 +11,9 @@ body {
 ul {
     list-style-type: none;
     margin: 0;
-    padding: 5px;
+    padding: 6px;
     width: 10%;
-    background-color: #f1f1f1;
+    background-color: #FF8800;
     position: fixed;
     height: 100%;
     overflow: auto;
@@ -35,25 +35,32 @@ li a:hover:not(.active) {
     background-color: #555;
     color: white;
 }
+
+body{
+    background: #ffa726;
+}
 </style>
 </head>
 <body>
  <ul>
-    <p>
+    <br>
     <div class="span2">
-        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" class="btn btn-primary btn-block"></form><p>
-        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="btn btn-primary btn-block"></form><p>
-        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"><input type="submit" value="Whois"button type="button" class="btn btn-primary btn-block"></form><p>
-        <form action="/add_site" method="get"><input type="submit" value="Add Site"button type="button" class="btn btn-primary btn-block"></form><p>
+        <img src="{{ url_for('static', filename = 'img/Spartan_Left_Bar.png') }}">
+        <br>
+        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" class="btn btn-primary btn-block"></form><br>
+        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="btn btn-primary btn-block"></form><br>
+        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"><input type="submit" value="Whois"button type="button" class="btn btn-primary btn-block"></form><br>
+        <form action="/add_site" method="get"><input type="submit" value="Add Site"button type="button" class="btn btn-primary btn-block"></form><br>
         <form action="/" method="get"><input type="submit" value="Home" button type="button" class="btn btn-primary btn-block"></form>
     </div>
  </ul>
 
   <div style="margin-left:10%;padding:1px 16px;height:1000px;">
-  <h1>Welcome to GoatRider</h1>
-  <img src="{{ url_for('static', filename = 'img/GoatRider.png') }}">
+  <h2>Welcome to Spartan</h2>
+  <img src="{{ url_for('static', filename = 'img/Spartan_Main.png') }}">
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script src="/static/js/bootstrap.min.js"></script>
+  <br>
   {% block content %}{% endblock %}
   </div>
   </body>

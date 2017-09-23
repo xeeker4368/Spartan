@@ -2,44 +2,57 @@
 
 {% block content %}
 <style>
-.bs-example  div[class^="col"] {
-	border: 1px solid white;
-	background: #f5f5f5;
-	text-align: center;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	}
+p{
+    border: 1px solid black;
+}
+
+{
+    background: #00ff00;
+}
+
 </style>
 <body>
-<p></p>
-<div class="container-fluid">
-	<!-- Bootstrap Grid -->
-	<div class="row">
-	  <div class="col-md-4">
-          <h5><b> {{ IP }}</b> was found in the following sites:</h5>
-              {% for site_number in range(number_of_sites) %}
-                {% if Blacklist[site_number] != "" %}
-            {{ Blacklist[site_number] }}<br>
-                {% endif %}
-            {% endfor %}
-            {% if OTX != "" %}
-                {{ OTX }}<br>
-            {% endif %}
-            {% if Alexa != "" %}
-                {{ Alexa }}<br>
-            {% endif %}
-            {% if Blacklist[site_number] == "" and OTX == "" and Alexa == "" %}
-    No matches found
-            {% endif %}
-      </div>
-    <div class="col-md-4">
-    Geo Info:
-    Country: {{ Geo_Country }} <p>
-    City / State: {{ Geo_Subvisions }} <p>
-    Timezeone: {{ Geo_Timezeone }}
-    </div>
-    </div>
+<!-- Bootstrap Grid -->
+<div class="row">
+    <div class="col-md-5">
+<b>
+    <p>
+{{ IP }}</b> was found in the following sites:
+    {% for site_number in range(number_of_sites) %}
+        {% if Blacklist[site_number] != "" %}
+{{ Blacklist[site_number] }}<br>
+        {% endif %}
+        {% endfor %}
+        {% if OTX != "" %}
+{{ OTX }}<br>
+        {% endif %}
+        {% if Alexa != "" %}
+{{ Alexa }}<br>
+        {% endif %}
 </div>
+<div class="col-md-5"><p>
+    <b>Geo Info:</b>
+    <b>Country: </b>{{ Geo_Country }} <br>
+    <b>City / State: </b>{{ Geo_Subvisions }} <br>
+    <b>Timezeone: </b>{{ Geo_Timezeone }}<br>
+</div>
+
+
+
+    {% for legth in range(cymon_legth) %}<br>
+
+<div class="col-md-5";><p>
+    <b>Cymon info:</b>
+    <b>Title:</b> {{ cymon_title[legth] }} <br>
+    <b>Feed: </b> {{ cymon_feed[legth] }} <br>
+    <b>Last seen Time:</b> {{ cymon_time[legth] }} <br>
+    <b>URL:</b> {{ cymon_ioc_url[legth] }} <br>
+    <b>IP:</b> {{ cymon_ioc_ip[legth] }}<br>
+</div>
+    {% endfor %}
+
+</div>
+
 <form action="/" method="get"><input type="submit" value="Search again" button type="button" class="btn btn-primary"></form>
 
 </body>

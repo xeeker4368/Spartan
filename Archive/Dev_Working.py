@@ -7,6 +7,8 @@ from zipfile import ZipFile
 from flask import request, render_template
 from app import app
 from geoip import geolite2
+import json
+from urllib2 import urlopen
 
 IP_Loc_File_Name = ""
 IP_Loc_Domain = ""
@@ -44,21 +46,20 @@ def Add_Site_Results():
 #compiles and pulls all of the results from the various searches and publishes them to the results site.
 @app.route('/results', methods=['POST', 'GET'])
 def User_Input():
-    Input = IP_Regex = r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
-    IP_Match = re.findall(IP_Regex, Input)
-    if not IP_Match:
-        pass
-    else:
         pull_blacklist()
         pull_alexa()
         pull_OTX()
         pull_GeoIP()
+        pull_cymon()
         site_count = len(blacklist_site_name)
         return render_template('results.html', IP=request.form['Searchable_IP'],
         Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
         OTX = (OTX_Match_Found), \
         Alexa = (Alexa_Match_Found), Geo_Country=(Geo_Country), Geo_Subvisions=(Geo_Subvisions), \
-        Geo_Timezeone=(Geo_Timezeone))
+        Geo_Timezeone=(Geo_Timezeone), cymon_title=(cymon_response_title), cymon_feed=(cymon_response_feed), \
+        cymon_time = (cymon_response_time), cymon_ioc_url=(cymon_response_ioc_url), \
+        cymon_ioc_ip =(cymon_response_ioc_ip), cymon_legth=(cymon_response_leght))
+
 
 @app.route('/URL_results', methods=['POST', 'GET'])
 def URL_Search():
@@ -148,10 +149,28 @@ def pull_alexa():
                 continue
             else:
                 continue
-@app.route('/URL_results', methods=['POST', 'GET'])
-def Action_to_URL():
-    print "This is a URL"
-    return
 
-app.run(debug='true')
-#app.run(host='0.0.0.0', port=80)
+def pull_cymon():
+    global cymon_response_title, cymon_response_feed, \
+    cymon_response_time, cymon_response_ioc, cymon_response_ioc_ip, cymon_response_ioc_url, cymon_response_leght
+    cymon_request = 'https://api.cymon.io/v2/ioc/search/ip/' + request.form['Searchable_IP']
+    cymon_response_title = {}
+    cymon_response_feed = {}
+    cymon_response_time = {}
+    cymon_response_ioc = {}
+    cymon_response_ioc_ip = {}
+    cymon_response_ioc_url = {}
+    cymon_response_body = json.load(urlopen(cymon_request))
+    cymon_response_leght = cymon_response_body[u'total']
+    for cymon_legth in range(cymon_response_leght):
+        cymon_response_title[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'title')
+        cymon_response_feed[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'feed')
+        cymon_response_time[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'timestamp')
+        cymon_response_ioc[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'ioc')
+        cymon_response_ioc_ip[cymon_legth] = cymon_response_ioc[cymon_legth].get(u'ip')
+        cymon_response_ioc_url[cymon_legth] = cymon_response_ioc[cymon_legth].get(u'url')
+        cymon_legth = cymon_legth + 1
+
+
+#app.run(debug='true')
+app.run(host='0.0.0.0', port=80)
