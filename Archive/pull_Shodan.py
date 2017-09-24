@@ -39,3 +39,67 @@ def pull_Shodan():
 #    Shodan_Ports_Open = ""
 #    Shodan_Port_Count = 0
 #    Shodan_Country = ""
+
+
+
+}
+<!--
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 7px;
+    width: 12%;
+    background-color: #FF8800;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+
+
+</div>
+    <div class="row">
+        <div class="col-5";><p>
+            <p class="wrap">
+                <div class="scroll">
+    <b>Virus Total Results:</b><br>
+    <b>Total number of results: {{ VT_number_of_responses }}</b><br>
+    {% for VT_responses in range(VT_number_of_responses) %}
+    <br>
+    <b>Scan date:</b> {{ VT_Response_Scan_Date[VT_responses] }}<br>
+    <b>URL resolution:</b> {{ VT_Response_URL[VT_responses] }}<br>
+    {% endfor %}
+<script>
+window.onscroll = function() {scrollFunction()};
+</script>
+
+                </div>
+            </p>
+        </div>
+    </div>
+<script>
+window.onscroll = function() {scrollFunction()};
+</script>
+</div>
+</div>
+<form action="/" method="get"><input type="submit" value="Search again" button type="button" class="btn btn-primary"></form>
+
+</body>
+{% endblock %}

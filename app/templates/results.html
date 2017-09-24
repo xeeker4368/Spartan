@@ -2,38 +2,41 @@
 
 {% block content %}
 <style>
-p{
-    border: 1px solid black;
+
+#outputborder
+{
+    border: 2px solid black;
 }
 
 {
     background: #00ff00;
 }
 
-p.wrap {
-    width: 25em;
-    border: 1px solid #000000;
+#wrap {
+    width: 49vw;
+    border: 2px solid #000000;
     word-wrap: break-word;
 }
 
-div.scroll {
-    width: 30%;
-    height: 30%;
+#scroll {
+    height: 30vh;
+    width: 50vw;
     overflow: scroll;
-}
-
+    }
 
 </style>
+
+
 <body>
 <!-- Bootstrap Grid -->
 <div class="row">
-    <div class="col-md-5">
-<b>
-    <p>
-{{ IP }}</b> was found in the following sites:
+    <div class="col-md-6";><p>
+        <div id="outputborder">
+<b> {{ IP }}</b> was found in the following sites:
     {% for site_number in range(number_of_sites) %}
         {% if Blacklist[site_number] != "" %}
-{{ Blacklist[site_number] }}<br>
+<br>
+{{ Blacklist[site_number] }}
         {% endif %}
         {% endfor %}
         {% if OTX != "" %}
@@ -42,46 +45,70 @@ div.scroll {
         {% if Alexa != "" %}
 {{ Alexa }}<br>
         {% endif %}
-</div>
-<div class="col-md-5"><p>
-    <b>Geo Info:</b>
-    <b>Country: </b>{{ Geo_Country }} <br>
-    <b>City / State: </b>{{ Geo_Subvisions }} <br>
-    <b>Timezone: </b>{{ Geo_Timezeone }}<br>
-</div>
-
-
-<div class="row">
-    {% for legth in range(cymon_legth) %}<br>
-
-<div class="col-md-5";><p>
-    <b>Cymon info:</b><br>
-    <b>Title:</b> {{ cymon_title[legth] }} <br>
-    <b>Feed: </b> {{ cymon_feed[legth] }} <br>
-    <b>Last seen Time:</b> {{ cymon_time[legth] }} <br>
-    <b>URL:</b> {{ cymon_ioc_url[legth] }} <br>
-    <b>IP:</b> {{ cymon_ioc_ip[legth] }}<br>
-</div>
-    {% endfor %}
-</div>
-    <div class="row">
-        <div class="col-5";><p>
-            <p class="wrap">
-                <div class="scroll">
-    <b>Virus Total Results:</b><br>
-    <b>Total number of results: {{ VT_number_of_responses }}</b><br>
-    {% for VT_responses in range(VT_number_of_responses) %}
-    <br>
-    <b>Scan date:</b> {{ VT_Response_Scan_Date[VT_responses] }}<br>
-    <b>URL resolution:</b> {{ VT_Response_URL[VT_responses] }}<br>
-    {% endfor %}
-                </div>
-            </p>
-        </div>
     </div>
 </div>
+<div class="col-md-6";><p><div id="outputborder">
+    <b> Geo Info:</b>
+    <b> Country: </b>{{ Geo_Country }} <br>
+    <b> City / State: </b>{{ Geo_Subvisions }} <br>
+    <b> Timezone: </b>{{ Geo_Timezeone }}<br>
+    <p>
 </div>
-<form action="/" method="get"><input type="submit" value="Search again" button type="button" class="btn btn-primary"></form>
+</div>
+
+<p>
+    <div class="row">
+    {% for legth in range(cymon_legth) %}<br><p>
+
+<div class="col-md-6";><p>
+    <div id="outputborder">
+    <b> Cymon info:</b><br>
+    <b> Title:</b> {{ cymon_title[legth] }} <br>
+    <b> Feed: </b> {{ cymon_feed[legth] }} <br>
+    <b> Last seen Time:</b> {{ cymon_time[legth] }} <br>
+    <b> URL:</b> {{ cymon_ioc_url[legth] }} <br>
+    <b> IP:</b> {{ cymon_ioc_ip[legth] }}
+    </div>
+</div>
+    {% endfor %}
+
+    </div>
+
+<div class="row">
+        <div class="col-6";><p>
+            <div id="scroll">
+                <div id="wrap">
+
+    <b> Virus Total Results:</b><br>
+    <b> Total number of results: {{ VT_number_of_responses }}</b><br>
+    {% for VT_responses in range(VT_number_of_responses) %}
+    <br>
+    <b> Scan date:</b> {{ VT_Response_Scan_Date[VT_responses] }}<br>
+    <b> URL resolution:</b> {{ VT_Response_URL[VT_responses] }}<p>
+    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="col-6";><p>
+            <div id="scroll">
+                <div id="wrap">
+    <b> VirusTotal Domain resolutions:</b><br>
+    <b> Total number of results: {{ VT_number_of_resolution }}</b><br>
+    {% for VT_Domain_responses in range(VT_number_of_resolution) %}
+    <br>
+    <b> Hostname:</b> {{ VT_Resolutions_Hostnames[VT_Domain_responses] }}<br>
+    <b> URL resolution:</b> {{ VT_Resolutions_Last_Resolution[VT_Domain_responses] }}<p>
+    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+</body>
+
+</div>
+<form action="/" method="get"><input type="submit" value="Search again" button type="button" class="button btn-lg"></form>
 
 </body>
 {% endblock %}

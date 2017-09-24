@@ -10,6 +10,7 @@ import json
 from app import app
 from urllib2 import urlopen
 import urllib
+from configparser import ConfigParser
 
 IP_Loc_File_Name = ""
 IP_Loc_Domain = ""
@@ -18,6 +19,17 @@ Import_Date = time.strftime("%I:%M:%S")
 
 #regex for matching IP's
 IP_Regex = r"[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+
+#Read config.ini file from Config folder and assign to variables
+parser = ConfigParser()
+parser.read('config/config.ini')
+
+#VirusTotal API
+VT_API = parser.get('API', 'Virustotal_API')
+
+#Shodan_API
+Shodan_API = parser.get('API', 'Shodan_API')
+
 
 #Main site
 @app.route('/')
@@ -61,8 +73,8 @@ def User_Input():
         Geo_Timezeone=(Geo_Timezeone), cymon_title=(cymon_response_title), cymon_feed=(cymon_response_feed), \
         cymon_time = (cymon_response_time), cymon_ioc_url=(cymon_response_ioc_url), \
         cymon_ioc_ip =(cymon_response_ioc_ip), cymon_legth=(cymon_response_leght), VT_number_of_responses=(VT_number_of_responses), \
-        VT_Response_Scan_Date=(VT_Response_Scan_Date), VT_Response_URL=(VT_Response_URL)) #VT_number_of_resolution=(VT_number_of_resolution), \
-        #VT_Resolutions_Hostnames=(VT_Resolutions_Hostnames),  VT_Resolutions_Last_Resolution=(VT_Resolutions_Last_Resolution))
+        VT_Response_Scan_Date=(VT_Response_Scan_Date), VT_Response_URL=(VT_Response_URL), VT_number_of_resolution=(VT_number_of_resolution), \
+        VT_Resolutions_Hostnames=(VT_Resolutions_Hostnames),  VT_Resolutions_Last_Resolution=(VT_Resolutions_Last_Resolution))
 
 
 @app.route('/URL_results', methods=['POST', 'GET'])
@@ -181,7 +193,7 @@ def pull_virustotal():
     VT_Resolutions_Hostnames, VT_Resolutions_Last_Resolution = {}, {}, {}, {}, {}, {}
 
     VT_url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-    VT_parameters = {'ip': request.form['Searchable_IP'], 'apikey': '40dc8379e9077009a2315e0a883b65d01c8e1e66002b55f732540845c83570ae'}
+    VT_parameters = {'ip': request.form['Searchable_IP'], 'apikey': VT_API}
     VT_response = urllib.urlopen('%s?%s' % (VT_url, urllib.urlencode(VT_parameters))).read()
     VT_response_dict = json.loads(VT_response)
     VT_number_of_responses = VT_response_dict[u'detected_urls'].__len__()
