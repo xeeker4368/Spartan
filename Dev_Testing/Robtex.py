@@ -14,7 +14,9 @@ print VT_response_dict[u'country']
 for VT_responses in range(VT_number_of_responses):
     VT_Response_Scan_Date = VT_response_dict[u'detected_urls'][VT_responses][u'scan_date']
     VT_Response_URL = VT_response_dict[u'detected_urls'][VT_responses][u'url']
+    VT_Response_Positives = VT_response_dict[u'detected_urls'][VT_responses][u'positives']
 
+    print "Positives:" + str(VT_Response_Positives)
     print "Scan Date: " + VT_Response_Scan_Date
     print "Scanned URL Resolution: " + VT_Response_URL
 

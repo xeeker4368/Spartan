@@ -13,26 +13,35 @@
 }
 
 #wrap {
-    width: 49vw;
+    width: 40vw;
     border: 2px solid #000000;
     word-wrap: break-word;
 }
 
 #scroll {
     height: 30vh;
-    width: 50vw;
+    width: 41vw;
     overflow: scroll;
     }
 
 </style>
-
-
 <body>
+<div class="btn-group" role="group">
+        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="submit" value="XForce" button type="button" class="button btn-lg"></form>&emsp;
+        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="button btn-lg"></form>&emsp;
+        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"><input type="submit" value="Who is"button type="button" class="button btn-lg"></form>&emsp;
+        <form action="/" method="get"><input type="submit" value="Search again" button type="button" class="button btn-lg"></form>
+</div>
+<div class="wrap">
 <!-- Bootstrap Grid -->
 <div class="row">
     <div class="col-md-6";><p>
         <div id="outputborder">
-<b> {{ IP }}</b> was found in the following sites:
+<b>
+The following sites were checked for {{ IP }}:<br>
+            {% for sites in Site_file %}
+        {{ sites }},
+{{ IP }}</b> was found in:
     {% for site_number in range(number_of_sites) %}
         {% if Blacklist[site_number] != "" %}
 <br>
@@ -47,68 +56,65 @@
         {% endif %}
     </div>
 </div>
-<div class="col-md-6";><p><div id="outputborder">
+
+<div class="col-md-5";><p><div id="outputborder">
     <b> Geo Info:</b>
     <b> Country: </b>{{ Geo_Country }} <br>
-    <b> City / State: </b>{{ Geo_Subvisions }} <br>
-    <b> Timezone: </b>{{ Geo_Timezeone }}<br>
-    <p>
-</div>
-</div>
+    <b> City: </b>{{ Geo_City }} <br>
+    <b> State: </b>{{ Geo_State }} <br>
+    <b> Timezone: </b>{{ Geo_Timezeone }}
 
-<p>
+</div>
+</div>
+    <br>
     <div class="row">
-    {% for legth in range(cymon_legth) %}<br><p>
+        <div class="col-md-5">
 
-<div class="col-md-6";><p>
-    <div id="outputborder">
-    <b> Cymon info:</b><br>
+            <div id="scroll">
+                <div id="wrap">
+    <b> Cymon info:</b>
+    {% for legth in range(cymon_response_length) %}<br><p>
     <b> Title:</b> {{ cymon_title[legth] }} <br>
-    <b> Feed: </b> {{ cymon_feed[legth] }} <br>
-    <b> Last seen Time:</b> {{ cymon_time[legth] }} <br>
-    <b> URL:</b> {{ cymon_ioc_url[legth] }} <br>
-    <b> IP:</b> {{ cymon_ioc_ip[legth] }}
-    </div>
-</div>
+    <b> Tag: </b> {{ cymon_tag[legth] }} <br>
+    <b> Reported by: </b> {{ cymon_reported_by[length] }} <br>
+    <b> Last seen Time:</b> {{ cymon_timestamp[legth] }} <br>
+    <b> Hostname:</b> {{ cymon_hostname[legth] }}<br>
     {% endfor %}
-
+                </div>
+            </div>
+        </div>
     </div>
-
-<div class="row">
-        <div class="col-6";><p>
+    <div class="row">
+        <div class="col-md-5";><p>
             <div id="scroll">
                 <div id="wrap">
-
     <b> Virus Total Results:</b><br>
-    <b> Total number of results: {{ VT_number_of_responses }}</b><br>
-    {% for VT_responses in range(VT_number_of_responses) %}
+    <b> Total number of malicious results: {{ VT_number_of_URL_responses }}</b><br>
+    {% for VT_responses in range(VT_URL_Resolutions) %}
     <br>
-    <b> Scan date:</b> {{ VT_Response_Scan_Date[VT_responses] }}<br>
-    <b> URL resolution:</b> {{ VT_Response_URL[VT_responses] }}<p>
+    <b> URL resolution:</b> {{ VT_URL[VT_responses] }}<br>
+    <b> Scan date:</b> {{ URL_Scan_Date[VT_responses] }}<br>
+    <b> Number of Positive hits:</b> {{ URL_Positive_Hits[VT_responses] }}<br>
     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 
-<div class="col-6";><p>
-            <div id="scroll">
-                <div id="wrap">
+<div class="col-md-5";><p>
+            <div id= "scroll">
+                <div id= "wrap">
     <b> VirusTotal Domain resolutions:</b><br>
-    <b> Total number of results: {{ VT_number_of_resolution }}</b><br>
-    {% for VT_Domain_responses in range(VT_number_of_resolution) %}
+    <b> Total number of results: {{ VT_URL_Resolutions }}</b><br>
+    Only the top 10 results are displayed <br>
+    {% for VT_Domain_responses in range(VT_URL_Resolutions) %}
     <br>
-    <b> Hostname:</b> {{ VT_Resolutions_Hostnames[VT_Domain_responses] }}<br>
-    <b> URL resolution:</b> {{ VT_Resolutions_Last_Resolution[VT_Domain_responses] }}<p>
+    <b> Hostname:</b> {{ VT_Hostname[VT_Domain_responses] }}<br>
+    <b> URL resolution:</b> {{ VT_Last_Resolution[VT_Domain_responses] }}<br>
     {% endfor %}
                 </div>
             </div>
         </div>
-
-</body>
-
-</div>
-<form action="/" method="get"><input type="submit" value="Search again" button type="button" class="button btn-lg"></form>
 
 </body>
 {% endblock %}

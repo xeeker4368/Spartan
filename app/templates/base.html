@@ -43,21 +43,17 @@ body{
 .base_button {
     background-color: #ff5722;
     color: black;
-    padding: 10px 21px;
     text-align: center;
     font-size: 16px;
     border-radius: 12px;
     cursor: pointer;
-
-
-    width: 11vw;
+width: 11vw;
 
 }
 
 .button {
     background-color: #ff5722;
     color: black;
-    padding: 10px 21px;
     text-align: center;
     font-size: 16px;
     border-radius: 12px;
@@ -68,27 +64,29 @@ body{
 
 }
 
+.page-wrap {
+width: 0 auto;
+margin: 0 auto;
+position: relative;
+}
+
 </style>
 </head>
 <body>
     <ul>
         <div class="span2">
-            <div style="height:150px;">
-        <img src="{{ url_for('static', filename = 'img/Spartan_Left_Bar.png') }}" align="middle"><br><br>
+            <div style="height:100px;padding:1px 0px">
+        <img src="{{ url_for('static', filename = 'img/Spartan_Left_Bar.png') }}" align="center"><br><br>
 
-        <form action="https://exchange.xforce.ibmcloud.com/ip/{{ IP }}" method="get" target="_blank"><input type="button" value="XForce" button type="button" class="base_button"></form><p>
-        <form action="https://www.abuseipdb.com/check/{{ IP }}" method="get" target="_blank"><input type="submit" value="Abuse IP DB" button type="button" class="base_button"></form><p>
-        <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"><input type="submit" value="Whois"button type="button" class="base_button"></form><p>
-        <form action="/add_site" method="get"><input type="submit" value="Add Site"button type="button" class="base_button"></form><p>
+        <form action="/add_site" method="get"><input type="submit" value="Add Site"button type="submit" class="base_button"></form><p>
         <form action="/" method="get"><input type="submit" value="Home" button type="button" class="base_button"></form><p>
         </div>
             </div>
     </ul>
   <div style="margin-left:14%;padding:1px 18px;height:750px;">
       <h3><b>Welcome to Spartan</b></h3>
-  <img src="{{ url_for('static', filename = 'img/Spartan_Main.png') }}" width="125" height="160">
-  <script src="http://code.jquery.com/jquery-latest.js"></script>
-  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="http://code.jquery.com/jquery-latest.js"></script><p>
+      <script src="/static/js/bootstrap.min.js"></script>
   <br>
   {% block content %}{% endblock %}
   </div>

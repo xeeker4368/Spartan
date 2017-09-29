@@ -45,7 +45,7 @@ def Add_Site():
 #used to show the results of the 'add_site'
 @app.route('/add_site_results', methods=['POST'])
 def Add_Site_Results():
-    global URL_List
+    global URL_List, content
     URL_List = "/home/localadmin/Documents/IP_List.txt"
     with open(URL_List, "a") as Site_file:
         Site_file.write(request.form['Additional_Site'])
@@ -59,6 +59,7 @@ def Add_Site_Results():
 #compiles and pulls all of the results from the various searches and publishes them to the results site.
 @app.route('/results', methods=['POST', 'GET'])
 def User_Input():
+        print request.form['Searchable_IP']
         pull_blacklist()
         pull_alexa()
         pull_OTX()
@@ -68,14 +69,11 @@ def User_Input():
         site_count = len(blacklist_site_name)
         return render_template('results.html', IP=request.form['Searchable_IP'],
         Blacklist=(blacklist_site_name), number_of_sites=(site_count), \
-        OTX = (OTX_Match_Found), \
-        Alexa = (Alexa_Match_Found), Geo_Country=(Geo_Country), Geo_Subvisions=(Geo_Subvisions), \
-        Geo_Timezeone=(Geo_Timezeone), cymon_title=(cymon_response_title), cymon_feed=(cymon_response_feed), \
-        cymon_time = (cymon_response_time), cymon_ioc_url=(cymon_response_ioc_url), \
-        cymon_ioc_ip =(cymon_response_ioc_ip), cymon_legth=(cymon_response_leght), VT_number_of_responses=(VT_number_of_responses), \
-        VT_Response_Scan_Date=(VT_Response_Scan_Date), VT_Response_URL=(VT_Response_URL), VT_number_of_resolution=(VT_number_of_resolution), \
-        VT_Resolutions_Hostnames=(VT_Resolutions_Hostnames),  VT_Resolutions_Last_Resolution=(VT_Resolutions_Last_Resolution))
-
+        OTX = (OTX_Match_Found), Alexa = (Alexa_Match_Found), Geo_Country=(Geo_Country), Geo_City=(Geo_City), Geo_State=(Geo_State),  \
+        Geo_Timezeone=(Geo_Timezeone), cymon_response_length=(cymon_response_length), cymon_title=(cymon_title), cymon_reported_by=(cymon_reported_by), \
+        cymon_hostname=(cymon_hostname), cymon_tag=(cymon_tag), cymon_timestamp=(cymon_timestamp), VT_number_of_responses=(VT_number_of_responses), URL_Positive_Hits=(URL_Positive_Hits), \
+        URL_Scan_Date=(URL_Scan_Date), VT_URL=(VT_URL), VT_URL_Resolutions=(VT_URL_Resolutions), \
+        VT_Hostname=(VT_Hostname), VT_Last_Resolution=(VT_Last_Resolution),VT_number_of_URL_responses=(VT_number_of_URL_responses), site_file_info=(content))
 
 @app.route('/URL_results', methods=['POST', 'GET'])
 def URL_Search():
@@ -128,11 +126,20 @@ def pull_blacklist():
 
 #pulls GEOIP info on the entered IP
 def pull_GeoIP():
-    global Geo_Country, Geo_Subvisions, Geo_Timezeone
-    Geo_IP_Info = geolite2.lookup(request.form['Searchable_IP'])
-    Geo_Country = Geo_IP_Info.country
-    Geo_Subvisions = Geo_IP_Info.subdivisions
-    Geo_Timezeone = Geo_IP_Info.timezone
+    try:
+        global Geo_Country, Geo_City, Geo_State, Geo_Timezeone
+        Geo_Country = ""
+        Geo_City = ""
+        Geo_State = ""
+        Geo_Timezeone = ""
+        Geo_IP_Info = geolite2.lookup(request.form['Searchable_IP'])
+        Geo_Country = Geo_IP_Info.country
+        Geo_City = Geo_IP_Info._data[u'city'][u'names'][u'en']
+        Geo_State = Geo_IP_Info._data[u'subdivisions'][0][u'iso_code']
+        Geo_Timezeone = Geo_IP_Info.timezone
+        return
+    except:
+        return
 
 
 def pull_OTX():
@@ -167,45 +174,62 @@ def pull_alexa():
                 continue
 
 def pull_cymon():
-    global cymon_response_title, cymon_response_feed, \
-    cymon_response_time, cymon_response_ioc, cymon_response_ioc_ip, cymon_response_ioc_url, cymon_response_leght
-    # Declaring Variables
-    cymon_response_title, cymon_response_feed, \
-    cymon_response_time, cymon_response_ioc, cymon_response_ioc_ip, cymon_response_ioc_url, cymon_response_leght = \
-    {}, {}, {}, {}, {}, {}, {}
-    cymon_request = 'https://api.cymon.io/v2/ioc/search/ip/' + request.form['Searchable_IP']
-    cymon_response_body = json.load(urlopen(cymon_request))
-    cymon_response_leght = cymon_response_body[u'total']
-    for cymon_legth in range(cymon_response_leght):
-        cymon_response_title[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'title')
-        cymon_response_feed[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'feed')
-        cymon_response_time[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'timestamp')
-        cymon_response_ioc[cymon_legth] = cymon_response_body[u'hits'][cymon_legth].get(u'ioc')
-        cymon_response_ioc_ip[cymon_legth] = cymon_response_ioc[cymon_legth].get(u'ip')
-        cymon_response_ioc_url[cymon_legth] = cymon_response_ioc[cymon_legth].get(u'url')
-        cymon_legth = cymon_legth + 1
+    global cymon_response_length, cymon_title, cymon_reported_by, cymon_hostname, cymon_tag, cymon_timestamp
+    cymon_response_length, cymon_title, cymon_reported_by, cymon_hostname, cymon_tag, cymon_timestamp = {}, {}, {}, {}, {}, {}
+    cymon_IP_request = 'https://api.cymon.io/v2/ioc/search/ip/' + (request.form['Searchable_IP']) + '?size=3'
+    cymon_response_ip = json.load(urlopen(cymon_IP_request))
+    cymon_response_length = cymon_response_ip[u'hits'].__len__()
+    if cymon_response_ip[u'hits'].__len__() == 0:
+        cymon_domain_legth = "No hits found"
+    elif cymon_response_length < 10:
+        cymon_response_length = cymon_response_ip[u'hits'].__len__()
+    else:
+        cymon_response_length == 10
+    for cymon_responses in range(cymon_response_length):
+        cymon_title[cymon_responses] = cymon_response_ip[u'hits'][cymon_responses].get(u'title')
+        cymon_reported_by[cymon_responses] = cymon_response_ip[u'hits'][cymon_responses].get(u'reported_by')
+        cymon_hostname[cymon_responses] = cymon_response_ip[u'hits'][cymon_responses][u'ioc'].get(u'hostname')
+        cymon_tag[cymon_responses] = str(cymon_response_ip[u'hits'][cymon_responses].get(u'tags'))
+        cymon_timestamp = cymon_response_ip[u'hits'][cymon_responses].get(u'timestamp')
+
+
+
 
 def pull_virustotal():
-    global VT_number_of_responses, VT_Response_Scan_Date, VT_Response_URL ,VT_number_of_resolution, \
-    VT_Resolutions_Hostnames, VT_Resolutions_Last_Resolution
-    # Declaring Variables
-    VT_number_of_responses, VT_Response_Scan_Date, VT_Response_URL, VT_number_of_resolution, \
-    VT_Resolutions_Hostnames, VT_Resolutions_Last_Resolution = {}, {}, {}, {}, {}, {}
-
+    global VT_number_of_responses, URL_Positive_Hits, URL_Scan_Date, VT_URL, VT_URL_Resolutions, \
+        VT_URL_Resolutions, VT_Hostname, VT_Last_Resolution, VT_number_of_URL_responses
+    VT_number_of_responses, URL_Positive_Hits, URL_Scan_Date, VT_URL, VT_URL_Resolutions, \
+    VT_URL_Resolutions, VT_Hostname, VT_Last_Resolution = {}, {}, {}, {}, {}, {}, {}, {}
     VT_url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
     VT_parameters = {'ip': request.form['Searchable_IP'], 'apikey': VT_API}
     VT_response = urllib.urlopen('%s?%s' % (VT_url, urllib.urlencode(VT_parameters))).read()
     VT_response_dict = json.loads(VT_response)
-    VT_number_of_responses = VT_response_dict[u'detected_urls'].__len__()
-    for VT_responses in range(VT_number_of_responses):
-        VT_Response_Scan_Date[VT_responses] = VT_response_dict[u'detected_urls'][VT_responses][u'scan_date']
-        VT_Response_URL[VT_responses] = VT_response_dict[u'detected_urls'][VT_responses][u'url']
-    VT_number_of_resolution = VT_response_dict[u'resolutions'].__len__()
-    TV_total_Domain_resolution = VT_response_dict[u'resolutions']
-    for VT_Resolutions in range(VT_number_of_resolution):
-        VT_Resolutions_Hostnames[VT_Resolutions] = TV_total_Domain_resolution[VT_Resolutions][u'hostname']
-        VT_Resolutions_Last_Resolution[VT_Resolutions] = TV_total_Domain_resolution[VT_Resolutions][u'last_resolved']
+    VT_number_of_URL_responses = VT_response_dict[u'resolutions'].__len__()
+    try:
+        if  VT_response_dict[u'detected_urls'].__len__() == 0:
+            VT_URL[0] = "No flagged URL's Found"
+        elif VT_number_of_URL_responses < 10:
+            VT_number_of_URL_responses = VT_response_dict[u'resolutions'].__len__()
+        else:
+            VT_number_of_URL_responses = 10
+        for URL_Responses in range(VT_number_of_URL_responses):
+            VT_URL[URL_Responses] = VT_response_dict[u'detected_urls'][URL_Responses].get(u'url', 'None')
+            URL_Positive_Hits[URL_Responses] = VT_response_dict[u'detected_urls'][URL_Responses].get(u'positives')
+            URL_Scan_Date[URL_Responses] = VT_response_dict[u'detected_urls'][URL_Responses].get(u'scan_date')
+    except:
+        VT_number_of_URL_responses = 0
 
+    VT_URL_Resolutions = VT_response_dict[u'resolutions'].__len__()
+    if VT_response_dict[u'resolutions'].__len__() == 0:
+        VT_Hostname = "No Hostnames found"
+        return
+    elif VT_URL_Resolutions < 10:
+        VT_URL_Resolutions = VT_response_dict[u'resolutions'].__len__()
+    else:
+        VT_URL_Resolutions = 10
+    for VT_URLs in range(VT_URL_Resolutions):
+            VT_Hostname[VT_URLs] = VT_response_dict[u'resolutions'][VT_URLs].get(u'hostname')
+            VT_Last_Resolution[VT_URLs] = VT_response_dict[u'resolutions'][VT_URLs].get(u'last_resolved')
 
-app.run(debug='true')
-#app.run(host='0.0.0.0', port=80)
+#app.run(debug='true')
+app.run(host='0.0.0.0', port=80, threaded=True)
