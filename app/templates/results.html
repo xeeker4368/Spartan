@@ -3,7 +3,7 @@
 {% block content %}
 <style>
 
-#outputborder
+.outputborder
 {
     border: 2px solid black;
 }
@@ -35,12 +35,9 @@
 <div class="wrap">
 <!-- Bootstrap Grid -->
 <div class="row">
-    <div class="col-md-6";><p>
-        <div id="outputborder">
+    <div class="col-sm-5";>
+        <div class="outputborder">
 <b>
-The following sites were checked for {{ IP }}:<br>
-            {% for sites in Site_file %}
-        {{ sites }},
 {{ IP }}</b> was found in:
     {% for site_number in range(number_of_sites) %}
         {% if Blacklist[site_number] != "" %}
@@ -57,18 +54,19 @@ The following sites were checked for {{ IP }}:<br>
     </div>
 </div>
 
-<div class="col-md-5";><p><div id="outputborder">
+<div class="col-md-5";><p></p><div class="outputborder">
     <b> Geo Info:</b>
     <b> Country: </b>{{ Geo_Country }} <br>
     <b> City: </b>{{ Geo_City }} <br>
     <b> State: </b>{{ Geo_State }} <br>
     <b> Timezone: </b>{{ Geo_Timezeone }}
+    <p>
+</div>
+</div>
 
-</div>
-</div>
     <br>
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-sm-5">
 
             <div id="scroll">
                 <div id="wrap">
@@ -84,8 +82,9 @@ The following sites were checked for {{ IP }}:<br>
             </div>
         </div>
     </div>
+<br>
     <div class="row">
-        <div class="col-md-5";><p>
+        <div class="col-md-5">
             <div id="scroll">
                 <div id="wrap">
     <b> Virus Total Results:</b><br>
@@ -101,7 +100,7 @@ The following sites were checked for {{ IP }}:<br>
         </div>
     </div>
 
-<div class="col-md-5";><p>
+<div class="col-md-5"><p>
             <div id= "scroll">
                 <div id= "wrap">
     <b> VirusTotal Domain resolutions:</b><br>
@@ -115,6 +114,5 @@ The following sites were checked for {{ IP }}:<br>
                 </div>
             </div>
         </div>
-
 </body>
 {% endblock %}

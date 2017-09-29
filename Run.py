@@ -46,6 +46,7 @@ def Add_Site():
 @app.route('/add_site_results', methods=['POST'])
 def Add_Site_Results():
     global URL_List, content
+    content = ""
     URL_List = "/home/localadmin/Documents/IP_List.txt"
     with open(URL_List, "a") as Site_file:
         Site_file.write(request.form['Additional_Site'])
@@ -73,7 +74,7 @@ def User_Input():
         Geo_Timezeone=(Geo_Timezeone), cymon_response_length=(cymon_response_length), cymon_title=(cymon_title), cymon_reported_by=(cymon_reported_by), \
         cymon_hostname=(cymon_hostname), cymon_tag=(cymon_tag), cymon_timestamp=(cymon_timestamp), VT_number_of_responses=(VT_number_of_responses), URL_Positive_Hits=(URL_Positive_Hits), \
         URL_Scan_Date=(URL_Scan_Date), VT_URL=(VT_URL), VT_URL_Resolutions=(VT_URL_Resolutions), \
-        VT_Hostname=(VT_Hostname), VT_Last_Resolution=(VT_Last_Resolution),VT_number_of_URL_responses=(VT_number_of_URL_responses), site_file_info=(content))
+        VT_Hostname=(VT_Hostname), VT_Last_Resolution=(VT_Last_Resolution),VT_number_of_URL_responses=(VT_number_of_URL_responses))
 
 @app.route('/URL_results', methods=['POST', 'GET'])
 def URL_Search():
@@ -231,5 +232,5 @@ def pull_virustotal():
             VT_Hostname[VT_URLs] = VT_response_dict[u'resolutions'][VT_URLs].get(u'hostname')
             VT_Last_Resolution[VT_URLs] = VT_response_dict[u'resolutions'][VT_URLs].get(u'last_resolved')
 
-#app.run(debug='true')
-app.run(host='0.0.0.0', port=80, threaded=True)
+app.run(debug='true')
+#app.run(host='0.0.0.0', port=80, threaded=True)
