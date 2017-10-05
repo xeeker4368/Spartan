@@ -18,10 +18,11 @@
     word-wrap: break-word;
 }
 
-#scroll {
-    height: 30vh;
-    width: 41vw;
+.scroll {
+    height: 150px;
     overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     }
 
 </style>
@@ -32,13 +33,12 @@
         <form action="http://whois.domaintools.com/{{ IP }}" method="get" target="_blank"><input type="submit" value="Who is"button type="button" class="button btn-lg"></form>&emsp;
         <form action="/" method="get"><input type="submit" value="Search again" button type="button" class="button btn-lg"></form>
 </div>
-<div class="wrap">
-<!-- Bootstrap Grid -->
-<div class="row">
-    <div class="col-sm-5";>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
         <div class="outputborder">
-<b>
-{{ IP }}</b> was found in:
+            <div class="scroll">
+<b>{{ IP }}</b> was found in:
     {% for site_number in range(number_of_sites) %}
         {% if Blacklist[site_number] != "" %}
 <br>
@@ -52,24 +52,27 @@
 {{ Alexa }}<br>
         {% endif %}
     </div>
-</div>
+    </div>
+        </div>
 
-<div class="col-md-5";><p></p><div class="outputborder">
+<div class="col-md-6">
+    <div class="outputborder">
+        <div class="scroll">
     <b> Geo Info:</b>
     <b> Country: </b>{{ Geo_Country }} <br>
     <b> City: </b>{{ Geo_City }} <br>
     <b> State: </b>{{ Geo_State }} <br>
     <b> Timezone: </b>{{ Geo_Timezeone }}
     <p>
+    </div>
+    </div>
 </div>
-</div>
-
+    </div>
     <br>
     <div class="row">
-        <div class="col-sm-5">
-
-            <div id="scroll">
-                <div id="wrap">
+        <div class="col-md-6">
+            <div class="outputborder">
+                <div class="scroll">
     <b> Cymon info:</b>
     {% for legth in range(cymon_response_length) %}<br><p>
     <b> Title:</b> {{ cymon_title[legth] }} <br>
@@ -84,9 +87,9 @@
     </div>
 <br>
     <div class="row">
-        <div class="col-md-5">
-            <div id="scroll">
-                <div id="wrap">
+        <div class="col-md-6">
+            <div class="outputborder">
+                    <div class="scroll">
     <b> Virus Total Results:</b><br>
     <b> Total number of malicious results: {{ VT_number_of_URL_responses }}</b><br>
     {% for VT_responses in range(VT_URL_Resolutions) %}
@@ -95,14 +98,13 @@
     <b> Scan date:</b> {{ URL_Scan_Date[VT_responses] }}<br>
     <b> Number of Positive hits:</b> {{ URL_Positive_Hits[VT_responses] }}<br>
     {% endfor %}
-                </div>
+                    </div>
             </div>
         </div>
-    </div>
 
-<div class="col-md-5"><p>
-            <div id= "scroll">
-                <div id= "wrap">
+                <div class="col-md-6">
+                    <div class="outputborder">
+                        <div class="scroll"><p>
     <b> VirusTotal Domain resolutions:</b><br>
     <b> Total number of results: {{ VT_URL_Resolutions }}</b><br>
     Only the top 10 results are displayed <br>
@@ -111,8 +113,11 @@
     <b> Hostname:</b> {{ VT_Hostname[VT_Domain_responses] }}<br>
     <b> URL resolution:</b> {{ VT_Last_Resolution[VT_Domain_responses] }}<br>
     {% endfor %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+    </div>
+</div>
+<p></p>
 </body>
 {% endblock %}
