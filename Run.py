@@ -60,7 +60,6 @@ def Add_Site_Results():
 #compiles and pulls all of the results from the various searches and publishes them to the results site.
 @app.route('/results', methods=['POST', 'GET'])
 def User_Input():
-        print request.form['Searchable_IP']
         pull_blacklist()
         pull_alexa()
         pull_OTX()
