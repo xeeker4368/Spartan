@@ -100,7 +100,7 @@ def pull_blacklist():
     try:
         blacklist_site_name = {}
         site_count = 0
-        website_list = open('/home/localadmin/Documents/IP_List.txt')
+        website_list = open('IP_List.txt')
         Blacklisted_pull_sites = website_list.readlines()
         file_length = len(Blacklisted_pull_sites)
         site_number = 0
@@ -237,5 +237,5 @@ def pull_virustotal():
             VT_Hostname[VT_URLs] = VT_response_dict[u'resolutions'][VT_URLs].get(u'hostname')
             VT_Last_Resolution[VT_URLs] = VT_response_dict[u'resolutions'][VT_URLs].get(u'last_resolved')
 
-#app.run(debug='true')
-app.run(host='0.0.0.0', port=80, threaded=True)
+app.run(debug='true')
+#app.run(host='0.0.0.0', port=80, threaded=True)
