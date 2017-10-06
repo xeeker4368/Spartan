@@ -197,14 +197,20 @@ def pull_cymon():
 
 def pull_virustotal():
     global VT_number_of_responses, URL_Positive_Hits, URL_Scan_Date, VT_URL, VT_URL_Resolutions, \
-        VT_URL_Resolutions, VT_Hostname, VT_Last_Resolution, VT_number_of_URL_responses
+    VT_URL_Resolutions, VT_Hostname, VT_Last_Resolution, VT_number_of_URL_responses
     VT_number_of_responses, URL_Positive_Hits, URL_Scan_Date, VT_URL, VT_URL_Resolutions, \
     VT_URL_Resolutions, VT_Hostname, VT_Last_Resolution = {}, {}, {}, {}, {}, {}, {}, {}
-    VT_url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
-    VT_parameters = {'ip': request.form['Searchable_IP'], 'apikey': VT_API}
-    VT_response = urllib.urlopen('%s?%s' % (VT_url, urllib.urlencode(VT_parameters))).read()
-    VT_response_dict = json.loads(VT_response)
-    VT_number_of_URL_responses = VT_response_dict[u'resolutions'].__len__()
+    VT_number_of_URL_responses = 0
+    VT_URL_Resolutions = 0
+    try:
+        VT_url = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
+        VT_parameters = {'ip': request.form['Searchable_IP'], 'apikey': VT_API}
+        VT_response = urllib.urlopen('%s?%s' % (VT_url, urllib.urlencode(VT_parameters))).read()
+        VT_response_dict = json.loads(VT_response)
+        VT_number_of_URL_responses = VT_response_dict[u'resolutions'].__len__()
+    except:
+        return
+
     try:
         if  VT_response_dict[u'detected_urls'].__len__() == 0:
             VT_URL[0] = "No flagged URL's Found"

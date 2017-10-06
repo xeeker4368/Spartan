@@ -1,0 +1,6 @@
+flask
+geoip2
+pygeoip
+ConfigParser
+python-geoip-geolite2
+flask-bootstrap

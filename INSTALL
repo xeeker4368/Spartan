@@ -1,0 +1,2 @@
+apt-get install python-pip && npm
+npm install bootstrap@3
