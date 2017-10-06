@@ -16,3 +16,9 @@ https://reputation.alienvault.com/reputation.unix
 http://malc0de.com/bl/IP_Blacklist.txt
 
 http://www.malwaredomainlist.com/hostslist/mdl.xml
+
+https://cymon.io/
+
+https://www.virustotal.com (With API Key)
+
+And Geo Info on the IP
