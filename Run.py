@@ -237,5 +237,5 @@ def pull_virustotal():
             VT_Hostname[VT_URLs] = VT_response_dict[u'resolutions'][VT_URLs].get(u'hostname')
             VT_Last_Resolution[VT_URLs] = VT_response_dict[u'resolutions'][VT_URLs].get(u'last_resolved')
 
-app.run(debug='true')
-#app.run(host='0.0.0.0', port=80, threaded=True)
+#app.run(debug='true')
+app.run(host='0.0.0.0', port=80, threaded=True)
