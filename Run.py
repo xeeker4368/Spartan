@@ -47,7 +47,7 @@ def Add_Site():
 def Add_Site_Results():
     global URL_List, content
     content = ""
-    URL_List = "/home/localadmin/Documents/IP_List.txt"
+    URL_List = "IP_List.txt"
     with open(URL_List, "a") as Site_file:
         Site_file.write(request.form['Additional_Site'])
         Site_file.write("\n")

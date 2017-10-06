@@ -1,0 +1,7 @@
+http://www.malwaredomainlist.com/hostslist/zeus.xml
+http://malc0de.com/bl/IP_Blacklist.txt
+https://www.binarydefense.com/banlist.txt
+https://www.binarydefense.com/tor.txt
+https://reputation.alienvault.com/reputation.unix
+http://malc0de.com/bl/IP_Blacklist.txt
+http://www.malwaredomainlist.com/hostslist/mdl.xml
