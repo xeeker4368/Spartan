@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "title": "Test Threat Model",
+    "owner": "Me",
+    "description": "NA"
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "title": "Diagram",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 0
+      }
+    ],
+    "reviewer": "Me2"
+  }
+}
